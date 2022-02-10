@@ -1,0 +1,114 @@
+.registrationContainer {
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    padding-top: 80px;
+}
+
+.registrationCard {
+  border: 1px solid rgb(216, 216, 216);
+    border-radius: 8px;
+    margin-left: 380px;
+    align-items: center;
+    height: 600px;
+    width: 800px;
+}
+
+.leftContainer{
+  padding: 30px 400px 50px 30px;
+
+
+  @media (min-width: 1401px){
+      width: 50%;
+      padding: 30px 50px 70px 50px;
+  }
+
+  @media (max-width: 1401px){
+      width: 100%;
+      padding: 10px 20px 20px 20px;
+  }
+
+  @media (max-width: 777px){
+      width: 100%;
+  }
+}
+
+.leftContainer h4{
+  color: rgb(0, 0, 0);
+  font-weight: lighter;
+  font-size: x-large;
+  font-family: sans-serif;
+
+} 
+
+.row button{
+  width: 100px;
+}
+
+.leftContainer .fname{
+    margin-bottom: 16px;
+}
+
+.leftContainer .fname input{
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    width: 49%;
+    height: 40px;
+}
+
+.leftContainer .pass input{
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    width: 49%;
+    height: 40px;
+}
+
+.leftContainer .fname .row-name{
+    margin-right: 7px;
+}
+
+.leftContainer .pass .row-pass{
+    margin-right: 7px;
+}
+
+.leftContainer p{
+    font-size: 13px;
+}
+
+.rightContainer{
+	justify-content: center;
+	align-items: center;
+    margin-left: 500px;
+    margin-top: -430px;
+    margin-bottom: 100px;
+
+
+	@media (min-width: 1401px){
+		width: 10%;
+	}
+
+	@media (max-width: 1401px) {
+		img{
+			width: 0;
+			height: 0;
+		}
+
+		p{
+			display: none;
+		}
+
+		width: 0%;
+
+  }
+}
+
+.rightContainer img{
+    width: 220px;
+}
+
+.rightContainer p {
+	font-size: 15px;
+	font-weight: 300px;
+	width: 74%;
+	text-align: center;
+}

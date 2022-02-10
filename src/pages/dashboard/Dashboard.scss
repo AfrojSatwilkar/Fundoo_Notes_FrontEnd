@@ -1,0 +1,86 @@
+$icon1Color : #777777;
+
+@mixin inputSearch {
+    height: 1.2cm;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    align-items: center;
+    background-color: #f0f0f0;
+    width: 80%;
+}
+
+
+
+@mixin searchBar {
+    border: none;
+    outline: none;
+    width: 60%;
+    height: 40px;  
+    border-radius: 5px;
+    box-sizing: border-box;    
+}
+.heaadbar{
+    display: flex;
+    // justify-content: space-around;
+    margin-left: 21px;
+    height: 60px;
+    align-items: center;
+
+.menu{
+    margin-right: 10px;
+}
+
+.name{
+    margin-right: 170px;
+}
+
+img{
+    margin-right: 10px;
+}
+
+.search-bar{
+    @include searchBar();
+    margin-right: 50px;
+    padding-right: 53px;
+
+    .input-search{
+        @include inputSearch();
+    }
+    #search-icon{
+    align-self: center;
+    }
+
+}
+.searchIcon{
+    display: flex;
+}
+
+.nav-right-icon{
+     width: 15%;
+     display: flex;
+     justify-content: end;
+     align-items: center;
+}
+}
+
+.drawer{
+   z-index: 1;
+}
+
+
+
+
+@media only screen and (max-width:600px){
+    .heaadbar{
+    .search-bar{
+        display:none;
+        width: 0%;
+    }
+    .nav-right-icon{
+        width: 30%;
+    }
+}
+
+    
+}
