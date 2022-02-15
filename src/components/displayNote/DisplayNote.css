@@ -1,0 +1,121 @@
+.disp-container {
+  margin: 30px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[5];
+      grid-template-columns: repeat(5, 1fr);
+  width: 95%;
+  height: 120px;
+}
+
+.disp-container .display-box {
+  display: -ms-grid;
+  display: grid;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  margin: 10px;
+  -webkit-box-shadow: -1px -1px 5px gray;
+          box-shadow: -1px -1px 5px gray;
+  border: lightgray;
+  border-radius: 6px;
+}
+
+.disp-container .icons-list {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  margin-top: 9px;
+  margin-bottom: 10px;
+}
+
+.disp-container .descp-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  outline: none;
+  border: none;
+  margin-left: 6px;
+  line-height: 2.2;
+}
+
+.disp-container .disp-icons {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.close-Icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0vh -4vw;
+}
+
+.display-box:hover .icons-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@media only screen and (max-width: 900px) {
+  .disp-container {
+    -ms-grid-columns: (1fr)[3];
+        grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+  }
+  .disp-container .display-box {
+    width: 230px;
+    margin: 15px auto;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .disp-container {
+    -ms-grid-columns: (1fr)[2];
+        grid-template-columns: repeat(2, 1fr);
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    width: 100%;
+  }
+  .disp-container .display-box {
+    width: 300px;
+    margin: 15px auto;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .disp-container {
+    -ms-grid-columns: (1fr)[1];
+        grid-template-columns: repeat(1, 1fr);
+    width: 100%;
+  }
+  .disp-container .display-box {
+    width: 250px;
+    margin: 15px auto;
+  }
+  .dialog {
+    width: 60%;
+  }
+  .dialog .close-Icons {
+    margin-left: 60%;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+/*# sourceMappingURL=DisplayNote.css.map */

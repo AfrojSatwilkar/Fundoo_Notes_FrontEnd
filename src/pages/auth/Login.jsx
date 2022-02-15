@@ -19,23 +19,6 @@ function Login() {
 
     const handleInput = (event) => {
         event.persist();
-        // const regEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+(@[a-zA-Z0-9.-]{3,})+(.[a-zA-Z]{2,})$');
-        // const regPass = new RegExp('^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*#?&])([a-zA-Z0-9@$!%*#?&]){8,}$');
-        // if (!regEmail.test(loginInput.email) && loginInput.email !== "") {
-        //     loginInput.errEmail = "The email must be a valid email address.";
-        //     // document.getElementById("Message").innerHTML = "The email must be a valid email address.";
-        // } else {
-        //     loginInput.errEmail = "";
-        //     // document.getElementById("Message").innerHTML = "";
-        // }
-
-        // if (!regPass.test(loginInput.password) && loginInput.password !== "") {
-        //     loginInput.errPass = "The email must be a valid email address.";
-        //     // document.getElementById("pass").innerHTML = "The email must be a valid email address.";
-        // } else {
-        //     loginInput.errPass = "";
-        //     // document.getElementById("pass").innerHTML = "";
-        // }
         setLogin({ ...loginInput, [event.target.name]: event.target.value });
     }
 
@@ -103,6 +86,9 @@ function Login() {
         axios.post(`/api/login`, data).then(res => {
             if (res.data.status === 201) {
                 localStorage.setItem('auth_token', res.data.token);
+                localStorage.setItem('firstName', res.data.firstname);
+                localStorage.setItem('lastName', res.data.lastname);
+                localStorage.setItem('email', res.data.email);
                 swal("Success", res.data.message, "success");
                 history.push('/dashboard');
             } else if (res.data.status === 402) {

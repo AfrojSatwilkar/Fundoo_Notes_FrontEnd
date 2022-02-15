@@ -1,0 +1,107 @@
+.take-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.take-container .title-container {
+  -webkit-box-shadow: -1px -1px 5px gray;
+          box-shadow: -1px -1px 5px gray;
+  border: lightgray;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 40px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 6px;
+  width: 50%;
+}
+
+.take-container .title-container input {
+  width: 70%;
+  outline: none;
+  border: none;
+}
+
+.take-container .title-container .title-icons {
+  width: 30%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.take-container .discp-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 50%;
+  height: 120px;
+  background-color: inherit;
+}
+
+.take-container .discp-container input {
+  outline: none;
+  border: none;
+  width: 100%;
+  height: 45%;
+  background-color: inherit;
+}
+
+.take-container .discp-container .discp-icons {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 2vh 2vw;
+}
+
+.take-container .discp-container .discp-icons .icon-list {
+  width: 60%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+@media only screen and (max-width: 900px) {
+  .take-container .title-container {
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .take-container .title-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 60%;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .take-container .title-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 70%;
+  }
+}
+/*# sourceMappingURL=TakeNote.css.map */

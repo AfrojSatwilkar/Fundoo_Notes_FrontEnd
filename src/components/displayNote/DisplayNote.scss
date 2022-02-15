@@ -1,0 +1,107 @@
+.disp-container{
+    margin: 30px;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    width: 95%;
+    height: 120px;
+
+
+    .display-box{
+        display: grid;
+        flex-direction: row;
+        margin: 10px;
+        box-shadow: -1px -1px 5px gray;
+        border: lightgray;
+        border-radius: 6px;
+    }
+
+    .icons-list{
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 9px;
+        margin-bottom: 10px;
+        // display: none;
+    }
+
+   .descp-title{
+       display: flex;
+       flex-direction: column;
+        outline: none;
+        border: none;
+        // height: 50%;
+        margin-left: 6px;
+        line-height: 2.2;
+
+    }
+
+    .disp-icons{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+       
+    }
+    
+
+    }
+    .close-Icon{
+        display: flex;
+        margin: 0vh -4vw;
+    
+}
+
+.display-box:hover {
+    .icons-list{
+        display: flex;
+    }
+}
+
+
+@media only screen and (max-width:900px){
+    .disp-container{
+        grid-template-columns: repeat(3,1fr);   
+        width: 100%;
+    
+    .display-box{
+        width: 230px;
+        margin: 15px auto;
+    }
+}
+}
+
+@media only screen and (max-width:600px){
+    .disp-container{
+        grid-template-columns: repeat(2,1fr); 
+        justify-content: center;  
+        width: 100%;
+          
+    .display-box{
+        width: 300px;
+        margin: 15px auto;
+
+    }
+}
+}
+
+
+@media only screen and (max-width:470px){
+    .disp-container{
+        grid-template-columns: repeat(1,1fr);   
+        width: 100%;
+    
+    .display-box{
+        width: 250px;
+        margin: 15px auto;
+    }
+}
+.dialog{
+    width: 60%;
+    .close-Icons{
+        margin-left: 60%;
+        justify-content: space-between;
+       
+     }   
+    
+}
+
+}

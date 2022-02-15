@@ -3,11 +3,12 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Popover from "@mui/material/Popover";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import './Profile.css'
 import axios from "axios";
 import swal from "sweetalert";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import Tippy from '@tippyjs/react';
+
 
 export default function PopoverPopupState() {
 
@@ -15,7 +16,7 @@ export default function PopoverPopupState() {
 
     const signout = (event) => {
         event.preventDefault();
-        axios.post(`/api/forgotpassword`).then(res => {
+        axios.post(`/api/logout`).then(res => {
             if (res.data.status === 200) {
                 localStorage.removeItem('auth_token');
                 swal("Success", res.data.message, "success");
@@ -30,7 +31,9 @@ export default function PopoverPopupState() {
             {(popupState) => (
                 <div>
                     <Button {...bindTrigger(popupState)}>
-                        <AccountCircleOutlinedIcon />
+                        <Tippy content="Profile">
+                            <button className="btn btn-danger rounded-circle">{localStorage.getItem("firstName").charAt(0)}</button>
+                        </Tippy>
                     </Button>
                     <Popover
                         {...bindPopover(popupState)}
@@ -47,10 +50,13 @@ export default function PopoverPopupState() {
                             <div >
 
                                 <div className="profile-container">
+                                    <div className="profile">
+                                        <button className="btn btn-danger btn-lg rounded-circle mb-3">{localStorage.getItem("firstName").charAt(0)}</button>
+                                    </div>
                                     <p> {localStorage.getItem("firstName")}{' '} {localStorage.getItem("lastName")}</p>
                                     <p> {localStorage.getItem("email")}</p>
                                     <div className="profile-button">
-                                        <button onClick={signout}>signout</button>
+                                        <button className="rounded" onClick={signout}>signout</button>
                                     </div>
                                 </div>
                             </div>

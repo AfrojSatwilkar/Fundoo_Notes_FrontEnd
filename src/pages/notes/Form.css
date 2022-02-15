@@ -1,0 +1,6 @@
+.Icons{
+    font-size:x-small;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

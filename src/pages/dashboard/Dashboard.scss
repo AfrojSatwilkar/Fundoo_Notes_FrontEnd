@@ -1,3 +1,4 @@
+
 $icon1Color : #777777;
 
 @mixin inputSearch {
@@ -5,45 +6,54 @@ $icon1Color : #777777;
     border: none;
     outline: none;
     border-radius: 5px;
-    align-items: center;
-    background-color: #f0f0f0;
-    width: 80%;
+    width: 100%;
+    background-color: #f2f2f2;
+
 }
 
-
-
-@mixin searchBar {
-    border: none;
-    outline: none;
-    width: 60%;
-    height: 40px;  
-    border-radius: 5px;
-    box-sizing: border-box;    
-}
 .heaadbar{
     display: flex;
-    // justify-content: space-around;
-    margin-left: 21px;
     height: 60px;
     align-items: center;
+    flex-direction: row;
 
-.menu{
-    margin-right: 10px;
+    .menu {
+        padding: 1rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .menu span{
+        display: none;
+    }
+
+    .menu:hover {
+        background-color: #d3d0d0;
+        border-radius: 50%;
+    
 }
 
-.name{
-    margin-right: 170px;
-}
-
-img{
-    margin-right: 10px;
-}
+    .name{
+        margin-right: 8%;
+        padding: 0.6rem;
+    }
+    
 
 .search-bar{
-    @include searchBar();
-    margin-right: 50px;
-    padding-right: 53px;
-
+    align-items: center;
+    display: flex;
+    width: 50%;
+    flex-direction: row;
+    border-radius: 7px;
+    padding-left: 1rem;
+    background-color: #f2f2f2;
+    border-style: solid;
+    border-width: thin;
+    .search{
+        margin-right: 1rem;
+    }
     .input-search{
         @include inputSearch();
     }
@@ -52,15 +62,24 @@ img{
     }
 
 }
+
+.search-bar:hover{
+    background-color: white;
+}
+
+.search-bar .input-search:hover{
+    background-color: white;
+}
+
 .searchIcon{
     display: flex;
 }
 
 .nav-right-icon{
-     width: 15%;
+     width: 30%;
      display: flex;
-     justify-content: end;
      align-items: center;
+     justify-content: end;
 }
 }
 
@@ -68,19 +87,25 @@ img{
    z-index: 1;
 }
 
-
-
-
-@media only screen and (max-width:600px){
+@media only screen and (max-width:550px){
     .heaadbar{
-    .search-bar{
-        display:none;
-        width: 0%;
-    }
-    .nav-right-icon{
-        width: 30%;
-    }
-}
-
+        height: 50px;
+        font-size: small;
+    .heaadbar{ 
+        .input-search{
+            height: 0.5cm;
+        }   
+        .nav-right-icon{
+            height: 3px;
+        }
+        .menu {
+            font-size: small;
+        }
     
+        .name{
+            font-size: small;
+        }
+    }
 }
+}
+    
