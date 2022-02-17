@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import '../displayNote/DisplayNote.css'
-// import Icons from '../icons/Icons';
-// import NoteService from '../../service/notesservice';
-
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -23,9 +20,6 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import EmptyNote from './EmptyNote';
 import Tippy from '@tippyjs/react';
-
-// const noteService = new NoteService();
-
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -55,7 +49,6 @@ const BootstrapDialogTitle = (props) => {
                         color: (theme) => theme.palette.grey[500],
                     }}
                 >
-                    {/* <CloseIcon /> */}
                 </IconButton>
             ) : null}
         </DialogTitle>
@@ -68,8 +61,6 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const DisplayNote = (props) => {
-    // const [dispNote, setNote] = useState(null);
-    // const [showEdit, setEdit] = useState(false);
     const [edit, setEdit] = useState(false);
     const [open, setOpen] = useState(false);
     const [task, setTask] = useState({
@@ -80,8 +71,11 @@ const DisplayNote = (props) => {
 
     let content = null;
 
-    const handleClick = () => {
+    const handleClick = (item) => {
         setEdit(true);
+        setTask({
+            id: item,
+        })
     }
 
     const handleClose = () => {
@@ -116,19 +110,19 @@ const DisplayNote = (props) => {
         });
     }
 
-    function handleDelete(item) {
+    const handleDelete = () => {
 
-        console.log(item);
-        
+        console.log(task.id);
+
         const data = {
-            id: item,
+            id: task.id,
         }
 
-        axios.post(`/api/deletenote`, data).then(res => {
+        axios.post(`/api/trashnote`, data).then(res => {
             if (res.data.status === 200) {
                 props.getThenote();
+                setEdit(false);
                 console.log(res);
-                
             }
         });
 
@@ -138,31 +132,34 @@ const DisplayNote = (props) => {
         content =
             <div className="disp-container" >
                 {
-                    props.dispNote.map((item, index) => {
-                        return(
-                        <div className="display-box" key={item.id}>
-                            <div className="descp-title" onClick={() => handleOpenTitle(item)}>
-                                <div className='title'>
-                                    {item.title} <PushPinIcon className='pin float-end m-2' style={{ color: 'black' }} /><br></br>
-                                {item.description}
+                    props.dispNote.slice(0).reverse().map((item, index) => {
+                        return (
+                            <div className="display-box" key={item.id}>
+                                <div className="descp-title" onClick={() => handleOpenTitle(item)}>
+                                    <div className='title'>
+                                        {item.title} <PushPinIcon className='pin float-end m-2' style={{ fontSize: 'inherit', color: 'black' }} /><br></br>
+                                        {item.description}
+                                    </div>
+                                </div>
+
                                 <div className="icons-list mt-3">
                                     <Tippy content="Remind me" placement='bottom'>
-                                        <AddAlertOutlinedIcon style={{ fontSize: 'inherit', marginRight: '10%' }} />
+                                        <AddAlertOutlinedIcon style={{ fontSize: 'inherit' }} />
                                     </Tippy>
                                     <Tippy content="collaborator" placement='bottom'>
-                                    <PersonAddAltOutlinedIcon style={{ fontSize: 'inherit', marginRight: '10%' }} />
+                                        <PersonAddAltOutlinedIcon style={{ fontSize: 'inherit' }} />
                                     </Tippy>
                                     <Tippy content="Background options" placement='bottom'>
-                                    <ColorLensOutlinedIcon style={{ fontSize: 'inherit', marginRight: '10%' }} />
+                                        <ColorLensOutlinedIcon style={{ fontSize: 'inherit' }} />
                                     </Tippy>
                                     <Tippy content="Add image" placement='bottom'>
-                                    <PhotoOutlinedIcon style={{ fontSize: 'inherit', marginRight: '10%' }} />
+                                        <PhotoOutlinedIcon style={{ fontSize: 'inherit' }} />
                                     </Tippy>
                                     <Tippy content="Archive" placement='bottom'>
-                                    <ArchiveOutlinedIcon style={{ fontSize: 'inherit', marginRight: '10%' }} />
+                                        <ArchiveOutlinedIcon style={{ fontSize: 'inherit' }} />
                                     </Tippy>
                                     <Tippy content="More" placement='bottom'>
-                                    <MoreVertOutlinedIcon style={{ fontSize: 'inherit', marginRight: '10%' }} onClick={handleClick} />
+                                        <MoreVertOutlinedIcon style={{ fontSize: 'inherit', marginRight: '10%' }} onClick={() => handleClick(item.id)} />
                                     </Tippy>
                                     <Popover
                                         edit={edit}
@@ -173,19 +170,17 @@ const DisplayNote = (props) => {
                                             horizontal: "left"
                                         }}
                                     >
-                                        <MenuItem onClick={() => handleDelete(item.id)}>Delete note</MenuItem>
+                                        <MenuItem onClick={handleDelete}>Delete note</MenuItem>
                                         <MenuItem >Add label</MenuItem>
                                         <MenuItem >Add drawing</MenuItem>
                                         <MenuItem >Make a copy</MenuItem>
                                         <MenuItem >Show tick boxes</MenuItem>
                                     </Popover>
-                                </div>
 
                                 </div>
                             </div>
-
-                        </div>
-                    )})
+                        )
+                    })
                 }
             </div >
     } else {
@@ -195,6 +190,7 @@ const DisplayNote = (props) => {
     const fetchTitleDesc = (e) => {
         e.persist();
         setTask({
+            ...task,
             [e.target.name]: e.target.value
         })
     }
@@ -212,7 +208,7 @@ const DisplayNote = (props) => {
                     <div style={{ backgroundColor: '#ffffff' }} >
                         <BootstrapDialogTitle id="customized-dialog-title" >
                             <div className='hower-title'>
-                                <input type="text" value={task.title} name="title" onChange={fetchTitleDesc} style={{ border: "none", outline: "none", backgroundColor: '#ffffff' }}/>
+                                <input type="text" value={task.title} name="title" onChange={fetchTitleDesc} style={{ border: "none", outline: "none", backgroundColor: '#ffffff' }} />
                             </div>
                         </BootstrapDialogTitle>
                         <DialogContent>
@@ -223,8 +219,27 @@ const DisplayNote = (props) => {
 
                         <DialogContent className="close-Icons" >
 
-                            {/* <Icons className="dialog-icon" mode="update" noteId={this.state.id} changeColor={this.changeColor} refreshDispNote={this.props.refreshDispNote} changeArchive={this.changeArchive} changeDelete={this.changeDelete} /> */}
-                            <Button id="dialog-button" autoFocus onClick={handleTaskClose}> Done </Button>
+                            <div className="icons-list mt-3">
+                                <Tippy content="Remind me" placement='bottom'>
+                                    <AddAlertOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} />
+                                </Tippy>
+                                <Tippy content="Collaborator" placement='bottom'>
+                                    <PersonAddAltOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} />
+                                </Tippy>
+                                <Tippy content="Background options" placement='bottom'>
+                                    <ColorLensOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} />
+                                </Tippy>
+                                <Tippy content="Add image" placement='bottom'>
+                                    <PhotoOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} />
+                                </Tippy>
+                                <Tippy content="Archive" placement='bottom'>
+                                    <ArchiveOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%', marginRight: '8%' }} />
+                                </Tippy>
+                                <Tippy content="More" placement='bottom'>
+                                    <MoreVertOutlinedIcon style={{ fontSize: 'inherit', marginRight: '15%' }} onClick={handleClick} />
+                                </Tippy>
+                                <Button id="dialog-button" autoFocus onClick={(title, description) => handleTaskClose(title, description)}> Done </Button>
+                            </div>
 
                         </DialogContent>
                     </div>

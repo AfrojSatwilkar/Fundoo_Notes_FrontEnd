@@ -24,13 +24,16 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import logo from '../../assets/images/logo.png';
+import TrashNote from '../../components/trashNote/TrashNote';
 import Notes from "../notes/Notes";
 import { Link } from "react-router-dom";
 import Tippy from '@tippyjs/react';
+import { Route } from "@mui/icons-material";
 
-// import {
-//     Switch, Route, Routes
-// } from 'react-router-dom';
+import {
+    Switch
+} from 'react-router-dom';
+import DisplayLabel from "../../components/displayLabel/DisplayLabel";
 
 const drawerWidth = 240;
 
@@ -114,7 +117,7 @@ const Dashboard = () => {
     {
       icons: <LightbulbOutlinedIcon />,
       icnText: "Notes",
-      route: '/dashboard'
+      route: '/dashboard/note'
     },
     {
       icons: <NotificationsOutlinedIcon />,
@@ -124,7 +127,8 @@ const Dashboard = () => {
 
     {
       icons: <EditOutlinedIcon />,
-      icnText: "Edit Labels"
+      icnText: "Edit Labels",
+      route: '/dashboard/label'
     },
 
     {
@@ -134,7 +138,8 @@ const Dashboard = () => {
 
     {
       icons: < DeleteOutlinedIcon />,
-      icnText: "Bin"
+      icnText: "Bin",
+      route: '/dashboard/trash'
     }
   ];
 
@@ -182,7 +187,6 @@ const Dashboard = () => {
         <DrawerHeader>
 
         </DrawerHeader>
-        {/* <Divider /> */}
         <List>
           {iconlist.map((text, index) => (
             <ListItem button key={text.icnText}>
@@ -200,15 +204,16 @@ const Dashboard = () => {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }} style={{ zIndex: +1 }}>
         <DrawerHeader />
         <Typography paragraph>
-          {/* <Switch>
-                <Route path="/note" exact component={Notes} />
-                
-              </Switch> */}
+          <Switch>
+                <Route path="/dashboard/note" component={Notes} />
+                <Route path="/dashboard/trash" component={TrashNote } />
+                <Route path="/dashboard/label" component={DisplayLabel } />
+              </Switch>
 
           {/* <Route path='/notes' component={Notes} /> */}
-          <Notes />
-          {/* <Archive/> */}
-          {/* <TrashNotes/>*/}
+          {/* <Notes /> */}
+          
+          {/* <TrashNote/> */}
         </Typography>
         <Typography paragraph></Typography>
       </Box>

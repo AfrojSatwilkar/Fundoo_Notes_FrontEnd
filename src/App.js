@@ -26,8 +26,11 @@ function App() {
       <Router>
         <Switch>
           <Redirect exact from="/" to="/login" />
+          <Redirect exact from="/dashboard" to="/dashboard/note" />
           <Route path="/register" component={Register} />
-          <Route path="/login" component={Login} />
+          <Route path="/login" >
+            {localStorage.getItem('auth_token') ? <Redirect to='/dashboard/note' /> : <Login />}
+            </Route>
           <Route path="/forgotpassword" component={Forgotpassword} />
           <Route path="/resetpassword/:id" component={Resetpassword} />
           <Route path="/dashboard" component={Dashboard} />

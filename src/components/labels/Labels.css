@@ -1,0 +1,41 @@
+.popup {
+  background: rgba(104, 103, 103, 0.5);
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.popup-content {
+  height: 350px;
+  width: 300px;
+  background: #ffff;
+  padding: 20px;
+  border-radius: 5px;
+  position: relative;
+}
+
+h6 {
+  color: black;
+}
+
+input {
+  outline: none;
+  border: none;
+}
+
+td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+/*# sourceMappingURL=Labels.css.map */

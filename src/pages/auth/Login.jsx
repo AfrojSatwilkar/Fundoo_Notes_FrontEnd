@@ -90,7 +90,7 @@ function Login() {
                 localStorage.setItem('lastName', res.data.lastname);
                 localStorage.setItem('email', res.data.email);
                 swal("Success", res.data.message, "success");
-                history.push('/dashboard');
+                history.push('/dashboard/note');
             } else if (res.data.status === 402) {
                 swal("Warning", res.data.message, "error");
             } else if (res.data.status === 211) {

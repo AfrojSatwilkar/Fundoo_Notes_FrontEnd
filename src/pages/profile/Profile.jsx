@@ -19,6 +19,9 @@ export default function PopoverPopupState() {
         axios.post(`/api/logout`).then(res => {
             if (res.data.status === 200) {
                 localStorage.removeItem('auth_token');
+                localStorage.removeItem('lastName');
+                localStorage.removeItem('firstName');
+                localStorage.removeItem('email');
                 swal("Success", res.data.message, "success");
                 history.push('/');
             } else if (res.data.status === 404) {
