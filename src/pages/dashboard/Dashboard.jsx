@@ -106,46 +106,25 @@ const Drawer = styled(MuiDrawer, {
   })
 }));
 
-const Dashboard = () => {
-
+const Dashboard = ({history}) => {
+  const [openLabel, setOpenLabel] = React.useState(false);
   // const history = useHistory();
   const [open, setOpen] = React.useState(false);
-
-
-
-  let iconlist = [
-    {
-      icons: <LightbulbOutlinedIcon />,
-      icnText: "Notes",
-      route: '/dashboard/note'
-    },
-    {
-      icons: <NotificationsOutlinedIcon />,
-      icnText: "Reminder",
-      route: '/reminder'
-    },
-
-    {
-      icons: <EditOutlinedIcon />,
-      icnText: "Edit Labels",
-      route: '/dashboard/label'
-    },
-
-    {
-      icons: <ArchiveOutlinedIcon />,
-      icnText: "Archive"
-    },
-
-    {
-      icons: < DeleteOutlinedIcon />,
-      icnText: "Bin",
-      route: '/dashboard/trash'
-    }
-  ];
 
   const handleDrawerOpen = () => {
     setOpen(!open);
   };
+
+  const handleLabel = () => {
+    setOpenLabel(true);
+  }
+
+  const getColor=(curr) => {
+  if(history.location.pathname===curr) {
+    return "#f8b45a";
+  }
+
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -188,17 +167,49 @@ const Dashboard = () => {
 
         </DrawerHeader>
         <List>
-          {iconlist.map((text, index) => (
-            <ListItem button key={text.icnText}>
-              <Link to={text.route} style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}>
+          {/* {iconlist.map((text, index) => ( */}
+            <ListItem button style={{ background: getColor('/dashboard/note'), borderTopRightRadius: '20px', borderBottomRightRadius: '20px'}}>
+              <Link to='/dashboard/note' style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}>
                 <ListItemIcon style={{ alignItems: 'center' }}>
-                  {text.icons}
+                  <LightbulbOutlinedIcon />
                 </ListItemIcon>
-                <ListItemText primary={text.icnText} />
+                <ListItemText primary="Notes" />
               </Link>
-
             </ListItem>
-          ))}
+            <ListItem button style={{ background: getColor('/dashboard/reminder'), borderTopRightRadius: '20px', borderBottomRightRadius: '20px'}}>
+            <Link to='/dashboard/reminder' style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}>
+                <ListItemIcon style={{ alignItems: 'center' }}>
+                  <NotificationsOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Reminder" />
+              </Link>
+            </ListItem>
+            <ListItem button onClick={handleLabel}>
+            {/* <Link to='/dashboard/label' style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}> */}
+                <ListItemIcon style={{ alignItems: 'center' }} >
+                  <EditOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Label" />
+              {/* </Link> */}
+            </ListItem>
+            <ListItem button>
+            <Link to='/dashboard/archive' style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}>
+                <ListItemIcon style={{ alignItems: 'center' }}>
+                  <ArchiveOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Reminder" />
+              </Link>
+            </ListItem>
+            <ListItem button style={{ background: getColor('/dashboard/trash'), borderTopRightRadius: '20px', borderBottomRightRadius: '20px'}}>
+            <Link to='/dashboard/trash' style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}>
+                <ListItemIcon style={{ alignItems: 'center' }}>
+                  < DeleteOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Bin" />
+              </Link>
+            </ListItem>
+
+          {/* ))} */}
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }} style={{ zIndex: +1 }}>
@@ -207,13 +218,9 @@ const Dashboard = () => {
           <Switch>
                 <Route path="/dashboard/note" component={Notes} />
                 <Route path="/dashboard/trash" component={TrashNote } />
-                <Route path="/dashboard/label" component={DisplayLabel } />
               </Switch>
-
-          {/* <Route path='/notes' component={Notes} /> */}
-          {/* <Notes /> */}
+            <DisplayLabel openLabel={openLabel} setOpenLabel={setOpenLabel}/>
           
-          {/* <TrashNote/> */}
         </Typography>
         <Typography paragraph></Typography>
       </Box>

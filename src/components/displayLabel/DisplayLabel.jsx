@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Labels from '../labels/Labels';
 
-const DisplayLabel = () => {
+const DisplayLabel = (props) => {
 
     const [displayLabel, setDisplayLabel] = useState(null);
 
@@ -16,7 +16,7 @@ const DisplayLabel = () => {
 
     return (
         <>
-            <Labels getLabel={getLabel} displayLabel={displayLabel} />
+            <Labels open={props.openLabel} close={props.setOpenLabel} getLabel={getLabel} displayLabel={displayLabel} />
         </>
     )
 }

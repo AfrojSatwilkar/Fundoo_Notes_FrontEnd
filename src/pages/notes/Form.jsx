@@ -9,9 +9,10 @@ import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import PhotoOutlinedIcon from '@mui/icons-material/PhotoOutlined';
 import './Form';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import FundooNoteServices from '../../service/FundooNoteServices';
 
+const services = new FundooNoteServices();
 const note = {
     title: '',
     description: ''
@@ -48,7 +49,8 @@ const Form = (props) => {
             description: addNote.description,
         }
 
-        axios.post(`/api/note`, data).then(res => {
+        // axios.post(`/api/note`, data).then(res => {
+        services.addNote(data).then(res => {
             if (res.data.status === 201) {
                 console.log(res.data.message);
                 props.getThenote();
@@ -94,7 +96,6 @@ const Form = (props) => {
                 />
                 {
                     showTextField &&
-                    // <div className='Icons'>
                         <div className='Icons d-flex mt-5'>
                             <AddAlertOutlinedIcon style={{fontSize: 'inherit', marginRight: '7%'}}/>
                             <PersonAddAltOutlinedIcon style={{fontSize: 'inherit', marginRight: '7%'}}/>
@@ -104,7 +105,6 @@ const Form = (props) => {
                             <MoreVertOutlinedIcon style={{fontSize: 'inherit', marginRight: '30%'}}/>
                             <Link style={{textDecoration: 'none', display: 'flex', color: 'inherit'}} onClick={handleClickAway}>Close</Link>
                         </div>
-                    // </div>
                 }
             </Container>
         // </ClickAwayListener >

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import './Labels.css';
+import '../../styles/Labels.scss';
+import { styled } from '@mui/material/styles';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import LabelIcon from '@mui/icons-material/Label';
@@ -7,6 +8,53 @@ import EditIcon from '@mui/icons-material/Edit';
 import axios from "axios";
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import PropTypes from 'prop-types';
+import { Link } from "react-router-dom";
+
+
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+        width: theme.spacing(35)
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
+        width: theme.spacing(10)
+    },
+}));
+
+const BootstrapDialogTitle = (props) => {
+    const { children, onClose, ...other } = props;
+
+    return (
+        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+            {children}
+            {onClose ? (
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 2,
+                        top: 2,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                </IconButton>
+            ) : null}
+        </DialogTitle>
+    );
+};
+
+BootstrapDialogTitle.propTypes = {
+    children: PropTypes.node,
+    onClose: PropTypes.func.isRequired,
+};
 
 
 const label = {
@@ -19,7 +67,7 @@ const Labels = (props) => {
         id: '',
         labelname: ''
     });
-    const [hover,setHover]=useState(false);
+    const [hover, setHover] = useState(false);
     const [toggleButton, setToggleButton] = useState(true);
 
     const handleLabel = (event) => {
@@ -27,6 +75,10 @@ const Labels = (props) => {
 
         setLabel({ ...addLabel, [event.target.name]: event.target.value });
 
+    }
+
+    const handleClose = () => {
+        props.close(false);
     }
 
     const onClickLabel = () => {
@@ -77,28 +129,28 @@ const Labels = (props) => {
     }
 
     if (props.displayLabel) {
-        content = 
-        <>
-            {
-                props.displayLabel.map((item, index) => {
-                    return (
-                        
-                        <tr key={item.id} 
-                        onMouseOver={() => setHover(true)}
-                        onMouseOut={() => setHover(false)} >
-                            {
-                                hover ? <td><DeleteIcon onClick={() => deleteLabel(item)} className="deleteicon" style={{ fontSize: 'inherit', marginRight: '20px' }} /></td> :
-                                <td><LabelIcon className="labelicon" style={{ fontSize: 'inherit', marginRight: '20px' }} /></td>
-                            }
-                            
-                            <td>{item.labelname}</td>
-                            <td><EditIcon onClick={() => inputLabel(item)} style={{ fontSize: 'inherit', marginLeft: '150px' }}/></td>
-                        </tr>
-                    )
+        content =
+            <>
+                {
+                    props.displayLabel.map((item, index) => {
+                        return (
 
-                })
-            }
-        </>
+                            <tr key={item.id}
+                                onMouseOver={() => setHover(true)}
+                                onMouseOut={() => setHover(false)} >
+                                {
+                                    hover ? <td><DeleteIcon onClick={() => deleteLabel(item)} className="deleteicon" style={{ fontSize: 'inherit', marginRight: '20px' }} /></td> :
+                                        <td><LabelIcon className="labelicon" style={{ fontSize: 'inherit', marginRight: '20px' }} /></td>
+                                }
+
+                                <td>{item.labelname}</td>
+                                <td><EditIcon onClick={() => inputLabel(item)} style={{ fontSize: 'inherit', marginLeft: '150px' }} /></td>
+                            </tr>
+                        )
+
+                    })
+                }
+            </>
     } else {
         content = <></>
     }
@@ -108,34 +160,34 @@ const Labels = (props) => {
     }, []);
 
     return (
-        <div className="popup">
-            <div className="popup-content">
-                <h6>Edit labels</h6>
-                <div className="addLabel d-flex" style={{ fontSize: 'inherit' }}>
-                    <CloseIcon style={{ fontSize: 'inherit', marginTop: '5px', marginRight: '5px' }} />
-                    <input type="text" name="labelname" onChange={handleLabel} value={addLabel.labelname} placeholder="Create new label" />
-                    {
-                        toggleButton ? <CheckIcon style={{ fontSize: 'inherit', marginTop: '5px', marginLeft: '20px' }} onClick={onClickLabel} /> :
-                        <DoneIcon style={{ fontSize: 'inherit', marginTop: '5px', marginLeft: '20px' }} onClick={editLabel} />
-                    }
-                    
-                </div>
-                <hr />
-                {content}
-                {/* {
-                        props.displayLabel.map((item, index) => {
-                            return (
-                                <tr key={item.id}>
-                                    <td><LabelIcon style={{ fontSize: 'inherit', marginRight: '20px' }} /></td>
-                                    <td>{item.labelname}</td>
-                                    <td><EditIcon style={{ fontSize: 'inherit', marginLeft: '150px' }} /></td>
-                                </tr>
-                            )
+        <BootstrapDialog aria-labelledby="customized-dialog-title" open={props.open}>
+            <div className="dialog" style={{ width: "100%", overflow: "hidden" }}>
+                <div style={{ backgroundColor: '#ffffff' }} >
+                    <BootstrapDialogTitle id="customized-dialog-title" >
+                        <h6>Edit labels</h6>
 
-                        })
-                    } */}
+                    </BootstrapDialogTitle>
+                    <DialogContent>
+                        <div className='hower-title d-flex'>
+                            <CloseIcon style={{ fontSize: 'inherit', marginTop: '5px', marginRight: '5px' }} />
+                            <input type="text" name="labelname" onChange={handleLabel} value={addLabel.labelname} placeholder="Create new label" />
+                            {
+                                toggleButton ? <CheckIcon style={{ fontSize: 'inherit', marginTop: '5px', marginLeft: '20px' }} onClick={onClickLabel} /> :
+                                <DoneIcon style={{ fontSize: 'inherit', marginTop: '5px', marginLeft: '20px' }} onClick={editLabel} />
+                            }
+                        </div>
+                        <hr />
+                        {content}
+                        <div >
+                            <hr />
+                            <Link style={{textDecoration: 'none', display: 'flex', color: 'inherit', marginLeft: '80%'}} onClick={handleClose}>Close</Link>
+                            
+                        </div>
+                    </DialogContent>
+                </div>
             </div>
-        </div>
+
+        </BootstrapDialog>  
     )
 }
 

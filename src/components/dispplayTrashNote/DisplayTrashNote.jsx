@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import '../displayNote/DisplayNote.css';
-// import Icons from '../icons/Icons';
-// import NoteService from '../../service/notesservice';
+import '../../styles/DisplayNote.scss';
 
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -12,12 +10,11 @@ import IconButton from '@mui/material/IconButton';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 
-import axios from 'axios';
 import EmptyNote from '../displayNote/EmptyNote';
 import Tippy from '@tippyjs/react';
+import FundooNoteServices from '../../service/FundooNoteServices';
 
-// const noteService = new NoteService();
-
+const services = new FundooNoteServices();
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -88,7 +85,8 @@ const DisplayTrashNote = (props) => {
             id: item,
         }
 
-        axios.post(`/api/deletenote`, data).then(res => {
+        // axios.post(`/api/deletenote`, data).then(res => {
+        services.deleteNote(data).then(res => {
             if (res.data.status === 200) {
                 props.getTrashNote();
                 setOpen(false);
@@ -105,7 +103,7 @@ const DisplayTrashNote = (props) => {
             id: item,
         }
 
-        axios.post(`/api/restorenote`, data).then(res => {
+        services.untrashNote(data).then(res => {
             if (res.data.status === 200) {
                 props.getTrashNote();
                 setOpen(false);
