@@ -12,6 +12,8 @@ import Button from '@mui/material/Button';
 import EmptyNote from './EmptyNote';
 import Icons from '../icons/Icons';
 import FundooNoteServices from '../../service/FundooNoteServices';
+import Tippy from '@tippyjs/react';
+import { Link } from 'react-router-dom';
 
 const services = new FundooNoteServices();
 
@@ -60,9 +62,17 @@ const DisplayNote = (props) => {
         id: '',
         title: '',
         description: '',
+        Collaborator: '',
     })
 
+    const [openColab, setOpenColab] = useState(false);
+
+
     let content = null;
+
+    const handleColab = () => {
+        setOpenColab(true);
+    }
 
     const handleOpenTitle = (item) => {
         setOpen(true);
@@ -70,26 +80,49 @@ const DisplayNote = (props) => {
             id: item.id,
             title: item.title,
             description: item.description,
+            Collaborator: item.Collaborator,
         })
     }
 
     const handleTaskClose = () => {
-        console.log(task.id);
-        const data = {
-            id: task.id,
-            title: task.title,
-            description: task.description,
+        console.log(task.Collaborator);
+        console.log(localStorage.getItem('email'))
+        if (task.Collaborator === localStorage.getItem('email')) {
+            const data = {
+                note_id: task.id,
+                title: task.title,
+                description: task.description,
+            }
+
+            services.editColabNote(data).then(res => {
+                if (res.data.status === 201) {
+                    props.getThenote();
+                    console.log(res);
+                    setOpen(false);
+                } else {
+                    console.log(res);
+                    setOpen(false);
+                }
+            });
+           
+        } else {
+            const data = {
+                id: task.id,
+                title: task.title,
+                description: task.description,
+            }
+
+            services.editNote(data).then(res => {
+                if (res.data.status === 200) {
+                    props.getThenote();
+                    console.log(res);
+                    setOpen(false);
+                } else {
+                    setOpen(false);
+                }
+            });
         }
 
-        services.editNote(data).then(res => {
-            if (res.data.status === 200) {
-                props.getThenote();
-                console.log(res);
-                setOpen(false);
-            } else {
-                setOpen(false);
-            }
-        });
     }
 
     if (props.dispNote) {
@@ -99,69 +132,77 @@ const DisplayNote = (props) => {
                     props.dispNote.slice(0).reverse().map((item, index) => {
                         return (
                             <div className="display-box" key={item.id}>
-                                <div className="descp-title" onClick={() => handleOpenTitle(item)}>
-                                    <div className='title'>
+                                <div className="descp-title">
+                                    <div className='title'  onClick={() => handleOpenTitle(item)}>
                                         {item.title} <PushPinIcon className='pin float-end m-2' style={{ fontSize: 'inherit', color: 'black' }} /><br></br>
-                                        {item.description}
+                                        {item.description}<br></br>
                                     </div>
+                                    <Tippy content={item.Collaborator} placement="bottom">
+                                        {
+                                            item.Collaborator ? <button onClick={handleColab} style={{ display: 'flex', alignItems: 'center', background: 'red', color: 'white', marginTop: '5px', height: '25px', width: '25px', borderRadius: '50%' }} class>{item.Collaborator.charAt(0)}</button> :
+                                            <></>
+                                        }
+                                        
+                                    </Tippy>
                                 </div>
-                                <Icons mode="update" item={item}  setTask={setTask}
+                                <Icons mode="update" item={item} setTask={setTask}
                                     task={task} getThenote={props.getThenote}
-                                 />
+                                    openColab={openColab} setOpenColab={setOpenColab}
+                                />
                             </div>
                         )
                     })
                 }
             </div >
     } else {
-    content = <EmptyNote />
-}
+        content = <EmptyNote />
+    }
 
-const fetchTitleDesc = (e) => {
-    e.persist();
-    setTask({
-        ...task,
-        [e.target.name]: e.target.value
-    })
-}
+    const fetchTitleDesc = (e) => {
+        e.persist();
+        setTask({
+            ...task,
+            [e.target.name]: e.target.value
+        })
+    }
 
-useEffect(() => {
-    props.getThenote();
-}, []);
+    useEffect(() => {
+        props.getThenote();
+    }, []);
 
-return (
+    return (
 
-    <div>
-        {content}
-        <BootstrapDialog aria-labelledby="customized-dialog-title" open={open}>
-            <div className="dialog" style={{ width: "100%", overflow: "hidden" }}>
-                <div style={{ backgroundColor: '#ffffff' }} >
-                    <BootstrapDialogTitle id="customized-dialog-title" >
-                        <div className='hower-title'>
-                            <input type="text" value={task.title} name="title" onChange={fetchTitleDesc} style={{ border: "none", outline: "none", backgroundColor: '#ffffff' }} />
-                        </div>
-                    </BootstrapDialogTitle>
-                    <DialogContent>
-                        <div className='hower-desp'>
-                            <input type="text" style={{ border: "none", outline: "none", backgroundColor: "#ffffff" }} value={task.description} name="description" onChange={fetchTitleDesc} />
-                        </div>
-                    </DialogContent>
+        <div>
+            {content}
+            <BootstrapDialog aria-labelledby="customized-dialog-title" open={open}>
+                <div className="dialog" style={{ width: "100%", overflow: "hidden" }}>
+                    <div style={{ backgroundColor: '#ffffff' }} >
+                        <BootstrapDialogTitle id="customized-dialog-title" >
+                            <div className='hower-title'>
+                                <input type="text" value={task.title} name="title" onChange={fetchTitleDesc} style={{ border: "none", outline: "none", backgroundColor: '#ffffff' }} />
+                            </div>
+                        </BootstrapDialogTitle>
+                        <DialogContent>
+                            <div className='hower-desp'>
+                                <input type="text" style={{ border: "none", outline: "none", backgroundColor: "#ffffff" }} value={task.description} name="description" onChange={fetchTitleDesc} />
+                            </div>
+                        </DialogContent>
 
-                    <DialogContent className="close-Icons" >
-                    <Icons mode="update" item={task}  setTask={setTask}
-                                    task={task} getThenote={props.getThenote}
-                                 />
-                            <Button id="dialog-button" autoFocus onClick={(title, description) => handleTaskClose(title, description)}> Done </Button>
+                        <DialogContent className="close-Icons" >
+                            <Icons mode="update" item={task} setTask={setTask}
+                                task={task} getThenote={props.getThenote}
+                            />
+                            <Link style={{ textDecoration: 'none', display: 'flex', color: 'inherit', marginLeft: '80%' }} id="dialog-button" onClick={(title, description) => handleTaskClose(title, description)}> Done </Link>
 
-                    </DialogContent>
+                        </DialogContent>
+                    </div>
                 </div>
-            </div>
 
-        </BootstrapDialog>
+            </BootstrapDialog>
 
-    </div >
+        </div >
 
-)
+    )
 }
 
 

@@ -1,7 +1,9 @@
-import axios from "axios";
 import React, { useState } from "react";
 import swal from 'sweetalert';
+import FundooNoteServices from "../../service/FundooNoteServices";
 import '../../styles/Forgotpassword.css';
+
+const services = new FundooNoteServices();
 
 function Register() {
 
@@ -22,7 +24,7 @@ function Register() {
             email: recoverInput.email,
         }
 
-        axios.post(`/api/forgotpassword`, data).then(res => {
+        services.forgotPassword(data).then(res => {
             if (res.data.status === 200) {
                 swal("Success", res.data.message, "success");
             } else if (res.data.status === 404) {

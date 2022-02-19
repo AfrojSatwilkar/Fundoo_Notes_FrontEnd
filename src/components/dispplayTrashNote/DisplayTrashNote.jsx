@@ -85,7 +85,6 @@ const DisplayTrashNote = (props) => {
             id: item,
         }
 
-        // axios.post(`/api/deletenote`, data).then(res => {
         services.deleteNote(data).then(res => {
             if (res.data.status === 200) {
                 props.getTrashNote();

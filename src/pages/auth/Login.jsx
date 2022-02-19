@@ -1,8 +1,10 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
+import FundooNoteServices from "../../service/FundooNoteServices";
 import '../../styles/Login.css';
+
+const services = new FundooNoteServices();
 
 function Login() {
 
@@ -83,7 +85,8 @@ function Login() {
             password: loginInput.password,
         }
 
-        axios.post(`/api/login`, data).then(res => {
+        // axios.post(`/api/login`, data).then(res => {
+        services.login(data).then(res => {
             if (res.data.status === 201) {
                 localStorage.setItem('auth_token', res.data.token);
                 localStorage.setItem('firstName', res.data.firstname);

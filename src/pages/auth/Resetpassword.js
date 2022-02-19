@@ -1,7 +1,9 @@
-import axios from "axios";
 import React, {useState, useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import swal from "sweetalert";
+import FundooNoteServices from "../../service/FundooNoteServices";
+
+const services = new FundooNoteServices();
 
 function Resetpassword(props) {
 
@@ -16,9 +18,6 @@ function Resetpassword(props) {
             confirm_password: '',
         },
     });
-
-    // const [searchParam, setSearchParam] = useSearchParams();
-    // searchParam.get("__firebase_request_key");
 
     console.log(resetInput.token);
     resetInput.token = props.match.params.id;
@@ -65,8 +64,6 @@ function Resetpassword(props) {
                 break;
           default:
             return false;
-    
-    
         }
       }
 
@@ -94,7 +91,7 @@ function Resetpassword(props) {
             headers: {"Authorization" : 'Bearer '+resetInput.token},
         }
         
-        axios.post(`/api/resetpassword`, data, config).then(res => {
+        services.resetPassword(data, config).then(res => { 
             if (res.data.status === 200) {
                 swal("Success", res.data.message, "success");
                 history.push('/');
@@ -141,7 +138,6 @@ function Resetpassword(props) {
                         <div className="form-group mt-5">
                             <button type="submit" className="btn btn-primary float-end">Reset</button>
                         </div>
-
                     </form>
                 </div>
             </div>

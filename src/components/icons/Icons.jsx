@@ -63,44 +63,116 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-//  const service = new UserService();
-
+const colabData = {
+    note_id: '',
+    email: ''
+}
 const Icons = (props) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const [anchorE2, setAnchorE2] = useState(null);
+    const [anchorEi, setAnchorEi] = useState(null);
     const open = Boolean(anchorEl);
-    const openL = Boolean(anchorE2);
-    const [openColab, setOpenColab] = useState(false);
+    // const openL = Boolean(anchorE2);
+    const [addColab, setAddColab] = useState({
+        note_id: '',
+        email: ''
+    })
 
-    const handleColab = () => {
-        setOpenColab(true);
+    let colab = null;
+
+    const handleCollaborator = () => {
+        props.setOpenColab(true);
     }
-    const handleDelete = () => {
 
-        console.log(props.item.id);
+    const closeColab = () => {
+        props.setOpenColab(false);
+    }
 
+    const handleColab = (event) => {
+        event.persist();
+
+        setAddColab({ ...addColab, [event.target.name]: event.target.value });
+    }
+
+    const handleLabel = (event) => {
+        setAnchorEi(event.currentTarget);
+        setAnchorEl(null);
+    }
+
+    const onClickColab = () => {
         const data = {
-            id: props.item.id,
+            note_id: props.item.id,
+            email: addColab.email
         }
 
-        services.trashNote(data).then(res => {
-            if (res.data.status === 200) {
+        services.addColab(data).then(res => {
+            if (res.data.status === 201) {
+                console.log(res);
                 props.getThenote();
-                setAnchorEl(false);
+                // props.getLabel();
+                setAddColab(colabData);
+                props.setOpenColab(false);
+            } else {
                 console.log(res);
             }
         });
+    }
 
+    const handleDelete = () => {
+
+        if (props.item.Collaborator === localStorage.getItem('email')) {
+            console.log(props.item.id);
+
+            const data = {
+                note_id: props.item.id,
+                email: props.item.Collaborator
+            }
+
+            services.removeColabNote(data).then(res => {
+                if (res.data.status === 201) {
+                    props.getThenote();
+                    setAnchorEl(false);
+                    console.log(res);
+                }
+            });
+
+        } else {
+            console.log(props.item.id);
+
+            const data = {
+                id: props.item.id,
+            }
+
+            services.trashNote(data).then(res => {
+                if (res.data.status === 200) {
+                    props.getThenote();
+                    setAnchorEl(false);
+                    console.log(res);
+                }
+            });
+        }
+
+        if (props.item.Collaborator === localStorage.getItem('email')) {
+            colab =
+                <div className='hower-title d-flex mb-2'>
+                    {/* <button className="btn btn-danger rounded-circle">{props.item.Collaborator.charAt(0)}</button> */}
+                    <div>
+                        <p style={{ marginLeft: '10px', fontSize: 'small', marginBottom: 0 }}>{props.item.Collaborator}</p>
+                    </div>
+                </div>
+        } else {
+            colab =
+                <></>
+        }
     }
 
     return (
         <div className="icons-list">
             <Tippy content="Remind me" placement='bottom'>
-                <AddAlertOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '3%' }} />
+                <AddAlertOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '3%' }} onClick={(event) => { setAnchorEl(event.currentTarget) }}/>
             </Tippy>
             <Tippy content="collaborator" placement='bottom'>
-                <PersonAddAltOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} onClick={handleColab}/>
+                <PersonAddAltOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} onClick={handleCollaborator} />
             </Tippy>
             <Tippy content="Background options" placement='bottom'>
                 <ColorLensOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} />
@@ -125,34 +197,33 @@ const Icons = (props) => {
                     vertical: "bottom",
                     horizontal: "left"
                 }}
-
             >
 
                 <MenuItem onClick={handleDelete}>Delete note</MenuItem>
-                <MenuItem onClick={(event) => {setAnchorE2(event.currentTarget)}}>Add label</MenuItem>
-                <Popover
-                anchorE1={anchorE2}
-                open={openL}
-                id={open ? "simple-popover" : undefined}
-                onClose={() => {
-                    setAnchorE2(null);
-                }}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left"
-                }}
+                <MenuItem onClick={handleLabel}>Add label</MenuItem>
+                {/* <Popover
+                    anchorEi={anchorEi}
+                    open={Boolean(anchorEi)}
+                    id={open ? "simple-popover" : undefined}
+                    onClose={() => {
+                        setAnchorEi(null);
+                    }}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left"
+                    }}
 
-            >
-                <MenuItem >Add drawing</MenuItem>
+                >
+                    <MenuItem >Add drawing</MenuItem>
 
-            </Popover>
+                </Popover> */}
                 <MenuItem >Add drawing</MenuItem>
                 <MenuItem >Make a copy</MenuItem>
                 <MenuItem >Show tick boxes</MenuItem>
             </Popover>
 
 
-            <BootstrapDialog aria-labelledby="customized-dialog-title" open={openColab}>
+            <BootstrapDialog aria-labelledby="customized-dialog-title" open={props.openColab}>
                 <div className="dialog" style={{ width: "100%", overflow: "hidden" }}>
                     <div style={{ backgroundColor: '#ffffff' }} >
                         <BootstrapDialogTitle id="customized-dialog-title" >
@@ -163,19 +234,23 @@ const Icons = (props) => {
                             <div className='hower-title d-flex mb-2'>
                                 <button className="btn btn-danger rounded-circle">{localStorage.getItem("firstName").charAt(0)}</button>
                                 <div>
-                                <p style={{marginLeft: '10px', fontSize: 'small', marginBottom: 0}}>{localStorage.getItem('firstName')}{' '}{localStorage.getItem('lastName')}<i>(Owner)</i></p>
-                                <p style={{marginLeft: '10px', fontSize: 'small', marginBottom: 0}}>{localStorage.getItem('email')}</p>
+                                    <p style={{ marginLeft: '10px', fontSize: 'small', marginBottom: 0 }}>{localStorage.getItem('firstName')}{' '}{localStorage.getItem('lastName')}<i>(Owner)</i></p>
+                                    <p style={{ marginLeft: '10px', fontSize: 'small', marginBottom: 0 }}>{localStorage.getItem('email')}</p>
                                 </div>
                             </div>
+                            {colab}
                             <div>
                                 <div className='btn btn-light rounded-circle border-dark justify-content-center'>
-                                    <PersonAddAltIcon style={{ fontSize: 'inherit', justifyContent: 'center'}}/>
+                                    <PersonAddAltIcon style={{ fontSize: 'inherit', justifyContent: 'center' }} />
                                 </div>
-                                <input type="text" placeholder='person or email to share with' style={{ marginLeft: '5px'}}></input>
+                                <input type="text" name='email' onChange={handleColab} value={addColab.email} placeholder='person or email to share with' style={{ marginLeft: '5px' }}></input>
                             </div>
                             <div >
                                 <hr />
-                                <Link style={{ textDecoration: 'none', display: 'flex', color: 'inherit', marginLeft: '80%' }}>Close</Link>
+                                <div style={{ display: 'flex' }}>
+                                    <Link onClick={closeColab} style={{ textDecoration: 'none', display: 'flex', color: 'inherit', marginLeft: '60%' }}>Close</Link>
+                                    <Link onClick={onClickColab} style={{ textDecoration: 'none', display: 'flex', color: 'inherit', marginLeft: '10%' }}>Save</Link>
+                                </div>
 
                             </div>
                         </DialogContent>
@@ -186,7 +261,5 @@ const Icons = (props) => {
         </div>
     )
 }
-// }
-
 
 export default Icons

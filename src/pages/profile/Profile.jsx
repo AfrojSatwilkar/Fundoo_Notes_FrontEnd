@@ -3,12 +3,13 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Popover from "@mui/material/Popover";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import './Profile.css'
-import axios from "axios";
+import '../../styles/Profile.scss'
 import swal from "sweetalert";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import Tippy from '@tippyjs/react';
+import FundooNoteServices from "../../service/FundooNoteServices";
 
+const services = new FundooNoteServices();
 
 export default function PopoverPopupState() {
 
@@ -16,14 +17,14 @@ export default function PopoverPopupState() {
 
     const signout = (event) => {
         event.preventDefault();
-        axios.post(`/api/logout`).then(res => {
+        services.logout().then(res => {
             if (res.data.status === 200) {
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('lastName');
                 localStorage.removeItem('firstName');
                 localStorage.removeItem('email');
                 swal("Success", res.data.message, "success");
-                history.push('/');
+                history.push('/login');
             } else if (res.data.status === 404) {
                 swal("warning", res.data.message, "warning");
             }

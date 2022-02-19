@@ -1,10 +1,11 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import swal from 'sweetalert';
 import logo from '../../assets/images/registration.jpg';
+import FundooNoteServices from "../../service/FundooNoteServices";
 import '../../styles/Registration.css';
 
+const services = new FundooNoteServices();
 function Register() {
 
     const history = useHistory();
@@ -127,7 +128,8 @@ function Register() {
             confirm_password: registerInput.confirm_password,
         }
 
-        axios.post(`/api/register`, data).then(res => {
+        // axios.post(`/api/register`, data).then(res => {
+        services.register(data).then(res => {
             if (res.data.status === 201) {
                 swal("Success", res.data.message, "success");
                 history.push('/');
