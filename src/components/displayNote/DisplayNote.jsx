@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import PushPinIcon from '@mui/icons-material/PushPin';
 
 import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EmptyNote from './EmptyNote';
 import Icons from '../icons/Icons';
 import FundooNoteServices from '../../service/FundooNoteServices';
@@ -57,6 +58,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const DisplayNote = (props) => {
+    const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
     const [task, setTask] = useState({
         id: '',
@@ -72,6 +74,20 @@ const DisplayNote = (props) => {
 
     const handleColab = () => {
         setOpenColab(true);
+    }
+
+    const deleteReminder = (item) => {
+        console.log(item.id);
+        const data = {
+            id: item.id
+        }
+
+        services.deleteReminder(data).then(res => {
+            if (res.data.status === 200) {
+                props.getThenote();
+                console.log(res);
+            }
+        })
     }
 
     const handleOpenTitle = (item) => {
@@ -137,18 +153,33 @@ const DisplayNote = (props) => {
                                         {item.title} <PushPinIcon className='pin float-end m-2' style={{ fontSize: 'inherit', color: 'black' }} /><br></br>
                                         {item.description}<br></br>
                                     </div>
+                                    <div style={{display: 'flex', alignItem: 'center', marginTop: '10px'}}>
+                                        {
+                                            item.labelname ? <p className='labelname' style={{fontSize: 'small', background: '#D6D6D6', width: 'auto', borderRadius: '20px', alignItems: 'center'}}>{item.labelname}<Link className="deleteicon" style={{ fontSize: 'inherit', marginLeft: '5px', marginBottom: '4px', textDecoration: 'none', color: 'inherit' }}>X</Link></p> :
+                                            <></>
+                                        }
+                                        {
+                                            item.reminder ? <p className='reminder' style={{fontSize: 'small', marginLeft: '5px', background: '#D6D6D6', width: '90px', borderRadius: '20px', alignItems: 'center'}}>{item.reminder}<Link onClick={() => deleteReminder(item)} className="deleteicon" style={{ fontSize: 'inherit', marginLeft: '5px', marginBottom: '4px', textDecoration: 'none', color: 'inherit' }}>X</Link></p> :
+                                            <></>
+                                        }
+                                        
+                                        
                                     <Tippy content={item.Collaborator} placement="bottom">
                                         {
-                                            item.Collaborator ? <button onClick={handleColab} style={{ display: 'flex', alignItems: 'center', background: 'red', color: 'white', marginTop: '5px', height: '25px', width: '25px', borderRadius: '50%' }} class>{item.Collaborator.charAt(0)}</button> :
+                                            item.Collaborator ? <button onClick={handleColab} style={{ display: 'flex', alignItems: 'center', background: 'red', color: 'white', marginLeft: '5px', height: '25px', width: '25px', borderRadius: '50%' }} class>{item.Collaborator.charAt(0)}</button> :
                                             <></>
                                         }
                                         
                                     </Tippy>
+                                    </div>
                                 </div>
+                                <div style={{ alignSelf: 'flex-end'}}>
                                 <Icons mode="update" item={item} setTask={setTask}
                                     task={task} getThenote={props.getThenote}
                                     openColab={openColab} setOpenColab={setOpenColab}
+                                    anchorEl={anchorEl} setAnchorEl={setAnchorEl}
                                 />
+                                </div>
                             </div>
                         )
                     })

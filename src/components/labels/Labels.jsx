@@ -14,8 +14,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
+import FundooNoteServices from "../../service/FundooNoteServices";
 
-
+const services = new FundooNoteServices();
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -106,7 +107,7 @@ const Labels = (props) => {
             labelname: addLabel.labelname
         }
 
-        axios.post(`/api/updatelabel`, data).then(res => {
+        services.editLabel(data).then(res => {
             if (res.data.status === 200) {
                 console.log(res);
                 setLabel(label);
@@ -120,7 +121,7 @@ const Labels = (props) => {
             id: item.id,
         }
 
-        axios.post(`/api/deletelabel`, data).then(res => {
+        services.deleteLabel(data).then(res => {
             if (res.data.status === 201) {
                 console.log(res);
                 props.getLabel();
@@ -173,21 +174,21 @@ const Labels = (props) => {
                             <input type="text" name="labelname" onChange={handleLabel} value={addLabel.labelname} placeholder="Create new label" />
                             {
                                 toggleButton ? <CheckIcon style={{ fontSize: 'inherit', marginTop: '5px', marginLeft: '20px' }} onClick={onClickLabel} /> :
-                                <DoneIcon style={{ fontSize: 'inherit', marginTop: '5px', marginLeft: '20px' }} onClick={editLabel} />
+                                    <DoneIcon style={{ fontSize: 'inherit', marginTop: '5px', marginLeft: '20px' }} onClick={editLabel} />
                             }
                         </div>
                         <hr />
                         {content}
                         <div >
                             <hr />
-                            <Link style={{textDecoration: 'none', display: 'flex', color: 'inherit', marginLeft: '80%'}} onClick={handleClose}>Close</Link>
-                            
+                            <Link style={{ textDecoration: 'none', display: 'flex', color: 'inherit', marginLeft: '80%' }} onClick={handleClose}>Close</Link>
+
                         </div>
                     </DialogContent>
                 </div>
             </div>
 
-        </BootstrapDialog>  
+        </BootstrapDialog>
     )
 }
 

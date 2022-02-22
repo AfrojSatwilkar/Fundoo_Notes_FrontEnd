@@ -45,6 +45,18 @@ class FundooNoteServices{
         return axios.post(`/api/restorenote`, data);
     }
 
+    getLabel() {
+        return axios.get(`/api/label`);
+    }
+
+    editLabel(data) {
+        return axios.post(`/api/updatelabel`, data);
+    }
+
+    deleteLabel(data) {
+        return axios.post(`/api/deletelabel`, data);
+    }
+
     addColab(data) {
         return axios.post(`/api/addcolab`, data);
     }
@@ -55,6 +67,30 @@ class FundooNoteServices{
 
     removeColabNote(data) {
         return axios.post(`/api/deletecolab`, data);
+    }
+
+    addReminder(data) {
+        return axios.post(`/api/addreminder`, data);
+    }
+
+    editReminder(data) {
+        return axios.post(`/api/editreminder`, data);
+    }
+
+    displayReminder() {
+        return axios.get(`/api/getremindernote`);
+    }
+
+    deleteReminder(data) {
+        return axios.post(`/api/deletereminder`, data);
+    }
+
+    addNoteLabel(data) {
+        return axios.post(`/api/notelabel`, data);
+    }
+
+    deleteNoteLabel(data) {
+        return axios.post(`/api/deletenotelabel`, data);
     }
 }
 

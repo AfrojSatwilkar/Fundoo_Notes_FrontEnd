@@ -7,3 +7,20 @@ p{
 input::placeholder{
     font-size: small;
 }
+.reminder-box{
+    padding-right: 40px;
+    margin-left: 10px;
+
+    h6{
+        margin-top: 10px;
+    }
+}
+
+.reminder-save{
+    padding-bottom: 30px;
+    padding-top: 20px;
+
+    button{
+        margin-left: 180px;
+    }
+}

@@ -21,6 +21,11 @@ import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import FundooNoteServices from '../../service/FundooNoteServices';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import MenuItems from '../menuItem/MenuItems';
+import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
+import Moment from 'moment';
 
 const services = new FundooNoteServices();
 
@@ -68,11 +73,12 @@ const colabData = {
     email: ''
 }
 const Icons = (props) => {
-
+    const minDate = new Date();
     const [anchorEl, setAnchorEl] = useState(null);
-    const [anchorEi, setAnchorEi] = useState(null);
     const open = Boolean(anchorEl);
-    // const openL = Boolean(anchorE2);
+    const [anchorEll, setAnchorEll] = useState(null);
+    const openL = Boolean(anchorEll);
+    const [addReminder, setAddReminder] = useState(new Date());
     const [addColab, setAddColab] = useState({
         note_id: '',
         email: ''
@@ -94,12 +100,9 @@ const Icons = (props) => {
         setAddColab({ ...addColab, [event.target.name]: event.target.value });
     }
 
-    const handleLabel = (event) => {
-        setAnchorEi(event.currentTarget);
-        setAnchorEl(null);
-    }
-
     const onClickColab = () => {
+        console.log(props.item.id);
+
         const data = {
             note_id: props.item.id,
             email: addColab.email
@@ -109,7 +112,6 @@ const Icons = (props) => {
             if (res.data.status === 201) {
                 console.log(res);
                 props.getThenote();
-                // props.getLabel();
                 setAddColab(colabData);
                 props.setOpenColab(false);
             } else {
@@ -118,59 +120,80 @@ const Icons = (props) => {
         });
     }
 
-    const handleDelete = () => {
-
-        if (props.item.Collaborator === localStorage.getItem('email')) {
-            console.log(props.item.id);
-
-            const data = {
-                note_id: props.item.id,
-                email: props.item.Collaborator
-            }
-
-            services.removeColabNote(data).then(res => {
-                if (res.data.status === 201) {
-                    props.getThenote();
-                    setAnchorEl(false);
-                    console.log(res);
-                }
-            });
-
-        } else {
-            console.log(props.item.id);
-
+    const saveReminder = () => {
+        console.log(props.item);
+        if(props.item.reminder === null) {
             const data = {
                 id: props.item.id,
+                reminder: Moment(addReminder).format("YYYY-MM-DD HH:mm:ss")
+            }
+            console.log(data.reminder);
+    
+            services.addReminder(data).then(res => {
+                if (res.data.status === 200) {
+                    console.log(res);
+                    props.getThenote();
+                    setAnchorEll(false);
+                }
+            });
+        } else {
+            const data = {
+                id: props.item.id,
+                reminder: Moment(addReminder).format("YYYY-MM-DD HH:mm:ss")
             }
 
-            services.trashNote(data).then(res => {
+            services.editReminder(data).then(res => {
                 if (res.data.status === 200) {
-                    props.getThenote();
-                    setAnchorEl(false);
                     console.log(res);
+                    props.getThenote();
+                    setAnchorEll(false);
                 }
             });
         }
+       
+    }
 
-        if (props.item.Collaborator === localStorage.getItem('email')) {
-            colab =
-                <div className='hower-title d-flex mb-2'>
-                    {/* <button className="btn btn-danger rounded-circle">{props.item.Collaborator.charAt(0)}</button> */}
-                    <div>
-                        <p style={{ marginLeft: '10px', fontSize: 'small', marginBottom: 0 }}>{props.item.Collaborator}</p>
-                    </div>
+    if (props.item.Collaborator === '') {
+        colab =
+            <></>
+
+    } else {
+        colab =
+            <div className='hower-title d-flex mb-2'>
+                {/* <button className="btn btn-danger rounded-circle">{props.item.Collaborator}</button> */}
+                <div>
+                    <p style={{ marginLeft: '10px', fontSize: 'small', marginBottom: 0 }}>{props.item.Collaborator}</p>
                 </div>
-        } else {
-            colab =
-                <></>
-        }
+            </div>
     }
 
     return (
         <div className="icons-list">
             <Tippy content="Remind me" placement='bottom'>
-                <AddAlertOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '3%' }} onClick={(event) => { setAnchorEl(event.currentTarget) }}/>
+                <AddAlertOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '3%' }} onClick={(event) => { setAnchorEll(event.currentTarget) }} />
             </Tippy>
+            <Popover
+                anchorEl={anchorEll}
+                open={openL}
+                id={open ? "simple-popover" : undefined}
+                onClose={() => {
+                    setAnchorEll(null);
+                }}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left"
+                }}
+            >
+                <div className='reminder-box'>
+                    <h6>Remainder:</h6>
+                    <DateTimePickerComponent value={addReminder} min={minDate} onChange={(event) => { setAddReminder(event.target.value) }}>
+                    </DateTimePickerComponent>
+                </div>
+                <div className='reminder-save'>
+                    <button className="btn btn-primary" onClick={saveReminder}>Save</button>
+                </div>
+
+            </Popover>
             <Tippy content="collaborator" placement='bottom'>
                 <PersonAddAltOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} onClick={handleCollaborator} />
             </Tippy>
@@ -198,30 +221,10 @@ const Icons = (props) => {
                     horizontal: "left"
                 }}
             >
-
-                <MenuItem onClick={handleDelete}>Delete note</MenuItem>
-                <MenuItem onClick={handleLabel}>Add label</MenuItem>
-                {/* <Popover
-                    anchorEi={anchorEi}
-                    open={Boolean(anchorEi)}
-                    id={open ? "simple-popover" : undefined}
-                    onClose={() => {
-                        setAnchorEi(null);
-                    }}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "left"
-                    }}
-
-                >
-                    <MenuItem >Add drawing</MenuItem>
-
-                </Popover> */}
-                <MenuItem >Add drawing</MenuItem>
-                <MenuItem >Make a copy</MenuItem>
-                <MenuItem >Show tick boxes</MenuItem>
+                <MenuItems item={props.item}
+                    getThenote={props.getThenote}
+                    setAnchorEl={setAnchorEl} />
             </Popover>
-
 
             <BootstrapDialog aria-labelledby="customized-dialog-title" open={props.openColab}>
                 <div className="dialog" style={{ width: "100%", overflow: "hidden" }}>
@@ -256,7 +259,6 @@ const Icons = (props) => {
                         </DialogContent>
                     </div>
                 </div>
-
             </BootstrapDialog>
         </div>
     )

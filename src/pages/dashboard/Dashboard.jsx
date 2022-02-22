@@ -23,8 +23,10 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import logo from '../../assets/images/logo.png';
 import TrashNote from '../../components/trashNote/TrashNote';
+import DisplayReminder from '../../components/displayReminder/DisplayReminder';
 import Notes from "../notes/Notes";
 import { Link } from "react-router-dom";
 import Tippy from '@tippyjs/react';
@@ -34,6 +36,9 @@ import {
     Switch
 } from 'react-router-dom';
 import DisplayLabel from "../../components/displayLabel/DisplayLabel";
+import FundooNoteServices from '../../service/FundooNoteServices';
+
+const services = new FundooNoteServices();
 
 const drawerWidth = 240;
 
@@ -110,13 +115,48 @@ const Dashboard = ({history}) => {
   const [openLabel, setOpenLabel] = React.useState(false);
   // const history = useHistory();
   const [open, setOpen] = React.useState(false);
-
+  const [displayLabel, setDisplayLabel] = React.useState(null);
+  let labels = null;
   const handleDrawerOpen = () => {
     setOpen(!open);
   };
 
   const handleLabel = () => {
     setOpenLabel(true);
+  }
+
+
+  const getLabel = () => {
+      services.getLabel().then(res => {
+          if (res.data.status === 201) {
+              setDisplayLabel(res.data.Label);
+          }
+      });
+  }
+
+  if(displayLabel){
+    labels = 
+    <>
+      {
+        displayLabel.map((item, index) => {
+          return (
+            <ListItem button style={{ borderTopRightRadius: '20px', borderBottomRightRadius: '20px'}}>
+              <Link to={`/dashboard/label/${item.labelname}`} style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}>
+                <ListItemIcon style={{ alignItems: 'center' }}>
+                  <LabelOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary={item.labelname} />
+              </Link>
+            </ListItem>
+          
+            
+          )
+        })
+      }
+      </>
+  } else {
+    labels = 
+      <></>
   }
 
   const getColor=(curr) => {
@@ -184,13 +224,12 @@ const Dashboard = ({history}) => {
                 <ListItemText primary="Reminder" />
               </Link>
             </ListItem>
+            {labels}
             <ListItem button onClick={handleLabel}>
-            {/* <Link to='/dashboard/label' style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}> */}
                 <ListItemIcon style={{ alignItems: 'center' }} >
                   <EditOutlinedIcon />
                 </ListItemIcon>
                 <ListItemText primary="Label" />
-              {/* </Link> */}
             </ListItem>
             <ListItem button>
             <Link to='/dashboard/archive' style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}>
@@ -218,9 +257,9 @@ const Dashboard = ({history}) => {
           <Switch>
                 <Route path="/dashboard/note" component={Notes} />
                 <Route path="/dashboard/trash" component={TrashNote } />
-              </Switch>
-            <DisplayLabel openLabel={openLabel} setOpenLabel={setOpenLabel}/>
-          
+                <Route path="/dashboard/reminder" component={DisplayReminder } />
+          </Switch>
+          <DisplayLabel getLabel={getLabel} openLabel={openLabel} setOpenLabel={setOpenLabel} displayLabel={displayLabel} />
         </Typography>
         <Typography paragraph></Typography>
       </Box>
