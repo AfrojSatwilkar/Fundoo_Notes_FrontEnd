@@ -72,7 +72,7 @@ const Labels = (props) => {
     const [toggleButton, setToggleButton] = useState(true);
 
     const handleLabel = (event) => {
-        event.persist();
+        // event.persist();
 
         setLabel({ ...addLabel, [event.target.name]: event.target.value });
 

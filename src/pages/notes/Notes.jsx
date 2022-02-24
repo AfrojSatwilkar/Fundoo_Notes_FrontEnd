@@ -23,7 +23,7 @@ const Notes = () => {
   return (
     <>
       <Form getThenote={getThenote} />
-      <DisplayNote getThenote={getThenote} dispNote={dispNote} />
+      <DisplayNote getThenote={getThenote} dispNote={dispNote} setNote={setNote}/>
     </>
   )
 }

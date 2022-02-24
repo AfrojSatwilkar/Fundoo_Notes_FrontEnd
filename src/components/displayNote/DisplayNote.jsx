@@ -7,14 +7,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import PushPinIcon from '@mui/icons-material/PushPin';
-
-import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EmptyNote from './EmptyNote';
 import Icons from '../icons/Icons';
 import FundooNoteServices from '../../service/FundooNoteServices';
 import Tippy from '@tippyjs/react';
 import { Link } from 'react-router-dom';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
 
 const services = new FundooNoteServices();
 
@@ -58,8 +57,13 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const DisplayNote = (props) => {
+    let content = null;
     const [anchorEl, setAnchorEl] = useState(null);
     const [open, setOpen] = useState(false);
+    // const [characters, updateCharacters] = useState(props.dispNote);
+    // updateCharacters(props.dispNote);
+    // if (characters === null) updateCharacters(props.dispNote);
+   
     const [task, setTask] = useState({
         id: '',
         title: '',
@@ -68,9 +72,6 @@ const DisplayNote = (props) => {
     })
 
     const [openColab, setOpenColab] = useState(false);
-
-
-    let content = null;
 
     const handleColab = () => {
         setOpenColab(true);
@@ -120,7 +121,7 @@ const DisplayNote = (props) => {
                     setOpen(false);
                 }
             });
-           
+
         } else {
             const data = {
                 id: task.id,
@@ -138,59 +139,83 @@ const DisplayNote = (props) => {
                 }
             });
         }
+    }
 
+    function handleOnDragEnd(result) {
+        console.log(props.dispNote);
+        const items = Array.from(props.dispNote);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+
+        props.setNote(items);
     }
 
     if (props.dispNote) {
+        
         content =
-            <div className="disp-container" >
-                {
-                    props.dispNote.slice(0).reverse().map((item, index) => {
-                        return (
-                            <div className="display-box" key={item.id}>
-                                <div className="descp-title">
-                                    <div className='title'  onClick={() => handleOpenTitle(item)}>
-                                        {item.title} <PushPinIcon className='pin float-end m-2' style={{ fontSize: 'inherit', color: 'black' }} /><br></br>
-                                        {item.description}<br></br>
-                                    </div>
-                                    <div style={{display: 'flex', alignItem: 'center', marginTop: '10px'}}>
-                                        {
-                                            item.labelname ? <p className='labelname' style={{fontSize: 'small', background: '#D6D6D6', width: 'auto', borderRadius: '20px', alignItems: 'center'}}>{item.labelname}<Link className="deleteicon" style={{ fontSize: 'inherit', marginLeft: '5px', marginBottom: '4px', textDecoration: 'none', color: 'inherit' }}>X</Link></p> :
-                                            <></>
-                                        }
-                                        {
-                                            item.reminder ? <p className='reminder' style={{fontSize: 'small', marginLeft: '5px', background: '#D6D6D6', width: '90px', borderRadius: '20px', alignItems: 'center'}}>{item.reminder}<Link onClick={() => deleteReminder(item)} className="deleteicon" style={{ fontSize: 'inherit', marginLeft: '5px', marginBottom: '4px', textDecoration: 'none', color: 'inherit' }}>X</Link></p> :
-                                            <></>
-                                        }
-                                        
-                                        
-                                    <Tippy content={item.Collaborator} placement="bottom">
-                                        {
-                                            item.Collaborator ? <button onClick={handleColab} style={{ display: 'flex', alignItems: 'center', background: 'red', color: 'white', marginLeft: '5px', height: '25px', width: '25px', borderRadius: '50%' }} class>{item.Collaborator.charAt(0)}</button> :
-                                            <></>
-                                        }
-                                        
-                                    </Tippy>
-                                    </div>
-                                </div>
-                                <div style={{ alignSelf: 'flex-end'}}>
-                                <Icons mode="update" item={item} setTask={setTask}
-                                    task={task} getThenote={props.getThenote}
-                                    openColab={openColab} setOpenColab={setOpenColab}
-                                    anchorEl={anchorEl} setAnchorEl={setAnchorEl}
-                                />
-                                </div>
-                            </div>
-                        )
-                    })
-                }
-            </div >
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId="characters" direction='horizontal'>
+                    {(provided) => (
+                        <div className="disp-container" {...provided.droppableProps} ref={provided.innerRef} >
+                            {
+                                props.dispNote.reverse().map((item, index) => {
+                                    return (
+                                        <Draggable key={item.id} draggableId={item.title} index={index}>
+                                            {(provided) => (
+                                                <div className="display-box" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                    <div className="descp-title">
+                                                        <div className='title' onClick={() => handleOpenTitle(item)}>
+                                                            {item.title} <PushPinIcon className='pin float-end m-2' style={{ fontSize: 'inherit', color: 'black' }} /><br></br>
+                                                            {item.description}<br></br>
+                                                        </div>
+                                                        <div style={{ display: 'flex', alignItem: 'center', marginTop: '10px' }}>
+                                                            {
+                                                                item.labelname ? <p className='labelname' style={{ fontSize: 'small', background: '#D6D6D6', width: 'auto', borderRadius: '20px', alignItems: 'center' }}>
+                                                                    {item.labelname}
+                                                                    <Link className="deleteicon" style={{ fontSize: 'inherit', marginLeft: '5px', marginBottom: '4px', textDecoration: 'none', color: 'inherit' }}>X</Link></p> :
+                                                                    <></>
+                                                            }
+                                                            {
+                                                                item.reminder ? <p className='reminder' style={{ fontSize: 'small', marginLeft: '5px', background: '#D6D6D6', width: '90px', borderRadius: '20px', alignItems: 'center' }}>
+                                                                    {item.reminder}
+                                                                    <Link onClick={() => deleteReminder(item)} className="deleteicon" style={{ fontSize: 'inherit', marginLeft: '5px', marginBottom: '4px', textDecoration: 'none', color: 'inherit' }}>X</Link></p> :
+                                                                    <></>
+                                                            }
+                                                            <Tippy content={item.Collaborator} placement="bottom">
+                                                                {
+                                                                    item.Collaborator ? <button onClick={handleColab} style={{ display: 'flex', alignItems: 'center', background: 'red', color: 'white', marginLeft: '5px', height: '25px', width: '25px', borderRadius: '50%' }}>
+                                                                        {item.Collaborator.charAt(0)}</button> :
+                                                                        <></>
+                                                                }
+
+                                                            </Tippy>
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ alignSelf: 'flex-end' }}>
+                                                        <Icons mode="update" item={item} setTask={setTask}
+                                                            task={task} getThenote={props.getThenote}
+                                                            openColab={openColab} setOpenColab={setOpenColab}
+                                                            anchorEl={anchorEl} setAnchorEl={setAnchorEl}
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                            )}
+                                        </Draggable>
+                                    )
+                                })
+                            }
+                            {provided.placeholder}
+                        </div >
+                    )}
+                </Droppable>
+            </DragDropContext>
     } else {
         content = <EmptyNote />
     }
 
     const fetchTitleDesc = (e) => {
-        e.persist();
+        // e.persist();
         setTask({
             ...task,
             [e.target.name]: e.target.value
@@ -224,7 +249,6 @@ const DisplayNote = (props) => {
                                 task={task} getThenote={props.getThenote}
                             />
                             <Link style={{ textDecoration: 'none', display: 'flex', color: 'inherit', marginLeft: '80%' }} id="dialog-button" onClick={(title, description) => handleTaskClose(title, description)}> Done </Link>
-
                         </DialogContent>
                     </div>
                 </div>

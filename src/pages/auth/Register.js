@@ -23,7 +23,7 @@ function Register() {
         },
     });
     const handleInput = (event) => {
-        event.persist();
+        // event.persist();
 
         setRegister({ ...registerInput, [event.target.name]: event.target.value });
     }
@@ -163,7 +163,7 @@ function Register() {
                                 <p className="text-danger">{registerInput.error_list.name}</p>
                             </div>
                             <div className="form-group mb-5">
-                                <input type="text" name="email" onChange={handleInput} value={registerInput.email} className="form-control" placeholder="Email" />
+                                <input type="email" name="email" onChange={handleInput} value={registerInput.email} className="form-control" placeholder="Email" />
                                 <p id="email">You can use letters, numbers & periods</p>
                                 <p className="text-danger">{registerInput.error_list.email}</p>
                             </div>

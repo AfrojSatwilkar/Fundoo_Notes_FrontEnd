@@ -19,13 +19,13 @@ function Resetpassword(props) {
         },
     });
 
-    console.log(resetInput.token);
+    // console.log(resetInput.token);
     resetInput.token = props.match.params.id;
 
     console.log(resetInput.token);
 
     const handleInput = (event) => {
-        event.persist();
+        // event.persist();
         setPassword({ ...resetInput, [event.target.name]: event.target.value });
     }
 

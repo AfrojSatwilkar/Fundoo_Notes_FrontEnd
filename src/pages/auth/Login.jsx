@@ -20,7 +20,7 @@ function Login() {
 
 
     const handleInput = (event) => {
-        event.persist();
+        // event.persist();
         setLogin({ ...loginInput, [event.target.name]: event.target.value });
     }
 
@@ -108,7 +108,7 @@ function Login() {
         <div className="loginContainer">
             <div className="loginCard">
                 <div className="title">
-                    <h2 className="text-center mt-5">
+                    <h2 className="fundoo text-center mt-5">
                         <span style={{ color: "#FF0000" }}>F</span>
                         <span style={{ color: "#66CC66" }}>u</span>
                         <span style={{ color: "#FF9966" }}>n</span>
@@ -122,7 +122,7 @@ function Login() {
                 <div className="card-body">
                     <form onSubmit={loginSubmit}>
                         <div className="form-group mb-4">
-                            <input type="text" name="email" value={loginInput.email} onChange={handleInput} className="form-control" placeholder="Enter email" />
+                            <input type="email" name="email" value={loginInput.email} onChange={handleInput} className="form-control" placeholder="Enter email" />
                             <p id="Message" className="text-danger">{loginInput.errEmail}</p>
                         </div>
                         <div className="form-group mb-2">

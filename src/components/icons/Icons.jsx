@@ -153,19 +153,19 @@ const Icons = (props) => {
        
     }
 
-    if (props.item.Collaborator === '') {
-        colab =
-            <></>
+    // if (props.item.Collaborator === '') {
+    //     colab =
+    //         <></>
 
-    } else {
-        colab =
-            <div className='hower-title d-flex mb-2'>
-                {/* <button className="btn btn-danger rounded-circle">{props.item.Collaborator}</button> */}
-                <div>
-                    <p style={{ marginLeft: '10px', fontSize: 'small', marginBottom: 0 }}>{props.item.Collaborator}</p>
-                </div>
-            </div>
-    }
+    // } else {
+    //     colab =
+    //         <div className='hower-title d-flex mb-2'>
+    //             {/* <button className="btn btn-danger rounded-circle">{props.item.Collaborator}</button> */}
+    //             <div>
+    //                 <p style={{ marginLeft: '10px', fontSize: 'small', marginBottom: 0 }}>{props.item.Collaborator}</p>
+    //             </div>
+    //         </div>
+    // }
 
     return (
         <div className="icons-list">
@@ -186,13 +186,12 @@ const Icons = (props) => {
             >
                 <div className='reminder-box'>
                     <h6>Remainder:</h6>
-                    <DateTimePickerComponent value={addReminder} min={minDate} onChange={(event) => { setAddReminder(event.target.value) }}>
+                    <DateTimePickerComponent name="reminder" value={addReminder} min={minDate} onChange={(event) => { setAddReminder(event.target.value) }}>
                     </DateTimePickerComponent>
                 </div>
                 <div className='reminder-save'>
                     <button className="btn btn-primary" onClick={saveReminder}>Save</button>
                 </div>
-
             </Popover>
             <Tippy content="collaborator" placement='bottom'>
                 <PersonAddAltOutlinedIcon style={{ fontSize: 'inherit', marginLeft: '8%' }} onClick={handleCollaborator} />

@@ -65,7 +65,7 @@ const Form = (props) => {
     }
 
     const onTextChange = (e) => {
-        e.persist();
+        // e.persist();
         setAddNote({ ...addNote, [e.target.name]: e.target.value });
     }
 
@@ -74,11 +74,12 @@ const Form = (props) => {
             <Container ref={containerRef}>
                 {showTextField &&
                     <TextField
+                        className='a'
                         placeholder="Title"
                         variant="standard"
                         InputProps={{ disableUnderline: true }}
                         style={{ marginBottom: 10 }}
-                        onChange={(e) => onTextChange(e)}
+                        onChange={onTextChange}
                         name='title'
                         value={addNote.title}
                     />

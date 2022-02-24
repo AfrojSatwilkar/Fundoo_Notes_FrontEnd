@@ -140,7 +140,7 @@ const Dashboard = ({history}) => {
       {
         displayLabel.map((item, index) => {
           return (
-            <ListItem button style={{ borderTopRightRadius: '20px', borderBottomRightRadius: '20px'}}>
+            <ListItem button style={{ borderTopRightRadius: '20px', borderBottomRightRadius: '20px'}} key={item.id}>
               <Link to={`/dashboard/label/${item.labelname}`} style={{ textDecoration: 'none', display: 'flex', color: 'inherit' }}>
                 <ListItemIcon style={{ alignItems: 'center' }}>
                   <LabelOutlinedIcon />
@@ -148,8 +148,6 @@ const Dashboard = ({history}) => {
                 <ListItemText primary={item.labelname} />
               </Link>
             </ListItem>
-          
-            
           )
         })
       }
@@ -169,7 +167,7 @@ const Dashboard = ({history}) => {
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" open={open}>
-        <Toolbar class="heaadbar">
+        <Toolbar className="heaadbar">
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -189,7 +187,7 @@ const Dashboard = ({history}) => {
           <Typography className="name" variant="h6" component="div">
             Fundoo
           </Typography>
-          <div class="search-bar" >
+          <div className="search-bar" >
             <Tippy content="Search">
               <SearchOutlinedIcon className="search" />
             </Tippy>
@@ -248,7 +246,6 @@ const Dashboard = ({history}) => {
               </Link>
             </ListItem>
 
-          {/* ))} */}
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }} style={{ zIndex: +1 }}>

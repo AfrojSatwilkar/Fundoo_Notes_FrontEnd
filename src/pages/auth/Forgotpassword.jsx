@@ -13,7 +13,7 @@ function Register() {
     });
 
     const handleInput = (event) => {
-        event.persist();
+        // event.persist();
         setRegister({ ...recoverInput, [event.target.name]: event.target.value });
     }
 
@@ -55,7 +55,7 @@ function Register() {
                     <div className="row">
                         <form onSubmit={emailSubmit}>
                             <div className="form-group-mb-3">
-                                <input type="text" name="email" onChange={handleInput} value={recoverInput.email} className="form-control" placeholder="Enter email" />
+                                <input type="email" name="email" onChange={handleInput} value={recoverInput.email} className="form-control" placeholder="Enter email" />
                                 <p className="text-danger">{recoverInput.error_list.email}</p>
                             </div>
                             <div className="form-group mt-4">
