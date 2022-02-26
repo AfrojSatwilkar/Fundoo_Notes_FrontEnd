@@ -62,7 +62,13 @@ const DisplayNote = (props) => {
     const [open, setOpen] = useState(false);
     // const [characters, updateCharacters] = useState(props.dispNote);
     // updateCharacters(props.dispNote);
-    // if (characters === null) updateCharacters(props.dispNote);
+    // if(characters === null) {
+    //     if (characters !== props.dispNote){
+    //         updateCharacters(props.dispNote);
+    //     }
+    // }
+    // if (characters !== props.dispNote) updateCharacters(props.dispNote);
+    // console.log(characters);
    
     const [task, setTask] = useState({
         id: '',
@@ -142,7 +148,6 @@ const DisplayNote = (props) => {
     }
 
     function handleOnDragEnd(result) {
-        console.log(props.dispNote);
         const items = Array.from(props.dispNote);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
@@ -154,11 +159,11 @@ const DisplayNote = (props) => {
         
         content =
             <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId="characters" direction='horizontal'>
+                <Droppable droppableId="droppable" direction='horizontal'>
                     {(provided) => (
                         <div className="disp-container" {...provided.droppableProps} ref={provided.innerRef} >
                             {
-                                props.dispNote.reverse().map((item, index) => {
+                                props.dispNote.map((item, index) => {
                                     return (
                                         <Draggable key={item.id} draggableId={item.title} index={index}>
                                             {(provided) => (
